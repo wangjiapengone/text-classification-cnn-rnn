@@ -14,7 +14,7 @@ from sklearn import metrics
 from rnn_model import TRNNConfig, TextRNN
 from data.text_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
 
-problem = '提问主题大分类'
+problem = '提问主题分类'
 base_dir = 'train_test_sets/{}'.format(problem)
 train_dir = os.path.join(base_dir, 'train.xlsx')
 test_dir = os.path.join(base_dir, 'test.xlsx')
