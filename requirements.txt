@@ -1,3 +1,4 @@
+xlrd
 scikit-learn
 scipy
 numpy
