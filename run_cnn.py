@@ -13,13 +13,14 @@ import tensorflow as tf
 from sklearn import metrics
 
 from cnn_model import TCNNConfig, TextCNN
-from data.cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
+from data.text_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
 
-base_dir = 'data/cnews'
-train_dir = os.path.join(base_dir, 'cnews.train.txt')
-test_dir = os.path.join(base_dir, 'cnews.test.txt')
-val_dir = os.path.join(base_dir, 'cnews.val.txt')
-vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
+problem = '提问主题分类'
+base_dir = 'train_test_sets/{}'.format(problem)
+train_dir = os.path.join(base_dir, 'train.xlsx')
+test_dir = os.path.join(base_dir, 'test.xlsx')
+val_dir = os.path.join(base_dir, 'test.xlsx')
+vocab_dir = os.path.join(base_dir, 'vocab.txt')
 
 save_dir = 'checkpoints/textcnn'
 save_path = os.path.join(save_dir, 'best_validation')  # 最佳验证结果保存路径
@@ -189,9 +190,12 @@ if __name__ == '__main__':
     config = TCNNConfig()
     if not os.path.exists(vocab_dir):  # 如果不存在词汇表，重建
         build_vocab(train_dir, vocab_dir, config.vocab_size)
-    categories, cat_to_id = read_category()
+    categories, cat_to_id = read_category(problem)
+    print('categories:', categories)
+    print('cat_to_id:', cat_to_id)
     words, word_to_id = read_vocab(vocab_dir)
     config.vocab_size = len(words)
+    config.num_classes = len(categories)
     model = TextCNN(config)
 
     if sys.argv[1] == 'train':
