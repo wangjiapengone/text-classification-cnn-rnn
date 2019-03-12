@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-
 import os
 import sys
 import time
@@ -19,7 +17,7 @@ problem = '提问主题分类'
 base_dir = 'train_test_sets/{}'.format(problem)
 train_dir = os.path.join(base_dir, 'train.xlsx')
 test_dir = os.path.join(base_dir, 'test.xlsx')
-val_dir = os.path.join(base_dir, 'test.xlsx')
+val_dir = os.path.join(base_dir, 'val.xlsx')
 vocab_dir = os.path.join(base_dir, 'vocab.txt')
 
 save_dir = 'checkpoints/textcnn'
@@ -188,11 +186,11 @@ if __name__ == '__main__':
 
     print('Configuring CNN model...')
     config = TCNNConfig()
+    print('CNN config:', config)
     if not os.path.exists(vocab_dir):  # 如果不存在词汇表，重建
         build_vocab(train_dir, vocab_dir, config.vocab_size)
     categories, cat_to_id = read_category(problem)
     print('categories:', categories)
-    print('cat_to_id:', cat_to_id)
     words, word_to_id = read_vocab(vocab_dir)
     config.vocab_size = len(words)
     config.num_classes = len(categories)
