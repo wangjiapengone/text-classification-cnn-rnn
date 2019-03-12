@@ -3,6 +3,7 @@
 
 from collections import Counter
 import os
+import re
 import numpy as np
 import pandas as pd
 import tensorflow.contrib.keras as kr
@@ -14,6 +15,30 @@ def open_file(filename, mode='r'):
     mode: 'r' or 'w' for read or write
     """
     return open(filename, mode, encoding='utf-8', errors='ignore')
+
+
+def preprocess(text):
+    '''
+    对原始文本进行预处理
+
+    :param text: 文本
+    :return:
+    '''
+    # 如果是以”答：“开头，则去掉这两个字
+    if text.startswith('答：'):
+        text = text[2:]
+    # 去掉网站链接
+    text = re.sub(r'((http[s]?|ftp)://|www)(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
+                  ' ', text)
+    # 去掉数字内容
+    text = re.sub('\d+', ' ', text)
+    # 英文小写
+    text = text.lower()
+    # 去掉多余空白字符
+    text = re.sub('\s+', ' ', text)
+    # 去掉 '', ' '
+    text = [char for char in text if char not in ('', ' ')]
+    return text
 
 
 def read_data_file(filename):
